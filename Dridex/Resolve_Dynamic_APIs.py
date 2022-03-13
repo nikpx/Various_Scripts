@@ -15,7 +15,6 @@ for xrefs in XrefsTo(get_name_ea_simple(function_name)):
                 if len(function_name) == 0:
                     print (function_name)
                     print ( "Address: {}".format ( hex(xrefs.frm) ))
-                    print ("Function not identified")
                 else:
                     RVA = xrefs.frm - 0x75680000 #0x75680000 base address
                     API_address = RVA + 0x0400000 #0x0400000 base address without debugging
