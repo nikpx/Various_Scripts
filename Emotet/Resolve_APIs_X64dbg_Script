@@ -1,0 +1,40 @@
+//x64dbg script to resolve dynamically loaded Windows APIs.
+
+loadlib C:\Windows\SysWOW64\advapi32.dll
+loadlib C:\Windows\SysWOW64\userenv.dll
+loadlib C:\Windows\SysWOW64\urlmon.dll
+loadlib C:\Windows\SysWOW64\shell32.dll
+loadlib C:\Windows\SysWOW64\bcrypt.dll
+loadlib C:\Windows\SysWOW64\wtsapi32.dll
+loadlib C:\Windows\SysWOW64\wininet.dll
+loadlib C:\Windows\SysWOW64\winhttp.dll
+loadlib C:\Windows\SysWOW64\shlwapi.dll
+loadlib C:\Windows\SysWOW64\crypt32.dll
+
+
+ref 0x1001BFF0
+index = 0
+
+cmp $result,0
+je exit
+
+resolving:
+ref_addr = ref.addr(index)
+cmp ref_addr,0
+je exit
+index++
+stop_addr = ref_addr + 5
+
+
+start_addr = func.start(ref_addr)
+
+eip = start_addr
+
+erun stop_addr
+
+log "Resolved API:"{a:eax} " at: " {ref_addr}
+jmp resolving
+
+exit:
+msg "Script finished"
+ret
